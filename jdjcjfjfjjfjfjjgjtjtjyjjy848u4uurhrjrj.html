@@ -1,188 +1,219 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Device-Based Login</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #111;
-      color: #f00;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .success { color: #00ff00; font-weight: bold; }
-    .error { color: red; font-weight: bold; }
-
-    .logo-container img {
-      max-width: 50%;
-      height: auto;
-      margin-top: 10px;
-    }
-
-    /* Particle styles */
-    .particle {
-      position: absolute;
-      animation: floatParticle 3s linear infinite;
-      opacity: 0.8;
-      z-index: 0;
-    }
-
-    .square {
-      width: 8px;
-      height: 8px;
-      background-color: red;
-    }
-
-    .star {
-      width: 10px;
-      height: 10px;
-      background-color: white;
-      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    }
-
-    .goldbox {
-      width: 10px;
-      height: 10px;
-      background-color: gold;
-    }
-
-    .roundbox {
-      width: 10px;
-      height: 10px;
-      background-color: green;
-      border-radius: 50%;
-    }
-
-    @keyframes floatParticle {
-      0% {
-        transform: translate(0, 0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translate(calc(-50px + 100vw), calc(-50px + 100vh)) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    .button-container {
-      margin-top: 20px;
-    }
-
-    button {
-      padding: 10px 25px;
-      font-size: 18px;
-      background-color: #0088cc;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-
-    .payment-btn {
-      background-color: #00cc88;
-    }
-
-    #device-id {
-      margin-top: 15px;
-      color: #0f0;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="logo-container">
-    <img src="logo-url-here.png" alt="Logo" />
-  </div>
-
-  <h2>dark hack</h2>
-  <div id="login-message"></div>
-  <div id="device-id-message"></div>
-
-  <div class="button-container">
-    <button class="payment-btn" onclick="openPaymentPage()">Payment</button>
-  </div>
-
-  <script>
-    const approvalURL = 'https://raw.githubusercontent.com/Nyeem122-8/e-password-premium-/main/Aprooval.txt';
-    const deviceIdKey = 'device-id';
-
-    function generateDeviceId() {
-      const ua = navigator.userAgent;
-      const lang = navigator.language;
-      const res = `${ua}-${screen.width}x${screen.height}-${lang}`;
-      let hash = 0;
-      for (let i = 0; i < res.length; i++) {
-        hash = ((hash << 5) - hash) + res.charCodeAt(i);
-        hash |= 0;
-      }
-      return Math.abs(hash).toString(16);
-    }
-
-    function checkDeviceId() {
-      let deviceId = localStorage.getItem(deviceIdKey);
-      if (!deviceId) {
-        deviceId = generateDeviceId();
-        localStorage.setItem(deviceIdKey, deviceId);
-      }
-      document.getElementById("device-id-message").innerHTML = `<div id="device-id">Your Device ID: <b>${deviceId}</b></div>`;
-      return deviceId;
-    }
-
-    function autoLoginOnlyWithDevice() {
-      const deviceId = checkDeviceId();
-      fetch(approvalURL)
-        .then(res => res.ok ? res.text() : Promise.reject("GitHub fetch failed"))
-        .then(data => {
-          const allowedDevices = data.split('\n').map(line => line.trim());
-          if (allowedDevices.includes(deviceId)) {
-            document.getElementById("login-message").innerText = "Device verified! Logging in...";
-            document.getElementById("login-message").className = "success";
-            setTimeout(() => window.location.href = "zmmzmxmxkxkjxjxjdnnsndjxjxjjxjxjdhhfhdhdgfggfhdhhshsjejdhbtbfbfhht74urhthry3ubehrh7euebydhdbduenhudnnsiiwjezmmzmxmxkxkjxjxjdnnsndjxjxjjxjxjdhhfhdhdgfggfhdhhshsjejdhbtbfbfhht74urhthry3ubehrh7euebydhdbduenhudnnsiiwje.html", 1500);
-          } else {
-            document.getElementById("login-message").innerText = "sir your code if the no verify please payment and ki verify okay..";
-            document.getElementById("login-message").className = "error";
-          }
-        })
-        .catch(() => {
-          document.getElementById("login-message").innerText = "Failed to load data from GitHub.";
-          document.getElementById("login-message").className = "error";
-        });
-    }
-
-    function openPaymentPage() {
-      window.location.href = "o99.html";
-    }
-
-    // Create multiple particles each time
-    function createParticle() {
-      const types = ['square', 'star', 'goldbox', 'roundbox'];
-      for (let i = 0; i < 5; i++) {
-        const particleType = types[Math.floor(Math.random() * types.length)];
-        const particle = document.createElement('div');
-        particle.classList.add('particle', particleType);
-
-        particle.style.left = Math.random() * 100 + 'vw';
-        particle.style.top = Math.random() * 100 + 'vh';
-        particle.style.animationDuration = (Math.random() * 2 + 1) + 's';
-        document.body.appendChild(particle);
-
-        setTimeout(() => {
-          particle.remove();
-        }, 2000);
-      }
-    }
-
-    setInterval(createParticle, 50);
-
-    window.onload = () => {
-      autoLoginOnlyWithDevice();
-    };
-  </script>
-
-</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DARK HACK PREDICTOR</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #0d1117;
+      font-family: 'Courier New', Courier, monospace;
+      color: #ffffff;
+      margin: 0;
+      padding-top: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #22d3ee;
+    }
+
+    header p {
+      color: #9ca3af;
+    }
+
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.1;
+    }
+
+    #inputContainer {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    #messageInput {
+      background-color: #1f2937;
+      border: none;
+      border-radius: 5px;
+      color: #ffffff;
+      padding: 10px;
+      width: 250px;
+      outline: none;
+    }
+
+    #sendButton {
+      background-color: #3b82f6;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #sendButton:hover {
+      background-color: #2563eb;
+    }
+
+    .popup {
+      background-color: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      max-width: 90%;
+      margin: 20px auto;
+      word-wrap: break-word;
+    }
+
+    .copy-btn {
+      background-color: #facc15;
+      color: #000;
+      padding: 6px 12px;
+      border-radius: 5px;
+      margin-top: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #gameDataContainer {
+      margin-top: 20px;
+      max-width: 90%;
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      color: #22d3ee;
+      font-size: 1rem;
+      border-left: 3px solid #3b82f6;
+      padding-left: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>DARK HACK</h1>
+    <p>AI Market Analyzer - Predicts upcoming market trends</p>
+  </header>
+
+  <video id="bgVideo" src="3474322247-preview.mp4" autoplay muted loop></video>
+
+  <div id="popupContainer"></div>
+
+  <div id="inputContainer">
+    <input type="text" id="messageInput" placeholder="Type 'hack'..." autocomplete="off" />
+    <button id="sendButton">GO</button>
+  </div>
+
+  <div id="gameDataContainer"></div>
+
+  <audio id="bgAudio" src="technology-278512.mp3" autoplay loop></audio>
+
+  <script>
+    const messageInput = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
+    const popupContainer = document.getElementById("popupContainer");
+    const gameDataContainer = document.getElementById("gameDataContainer");
+    const chatId = crypto.randomUUID();
+    const audio = document.getElementById("bgAudio");
+    audio.volume = 0.2;
+
+    sendButton.addEventListener("click", () => {
+      const msg = messageInput.value.trim().toLowerCase();
+      messageInput.value = "";
+      if (msg === "AI" || msg === "hack") {
+        fetchPrediction();
+      }
+    });
+
+    messageInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        sendButton.click();
+      }
+    });
+
+    function typeText(element, text, speed = 30) {
+      let i = 0;
+      element.innerHTML = "";
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          element.innerHTML += text[i];
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, speed);
+    }
+
+    function fetchPrediction() {
+      fetch("https://crbbb.com/api/webapi/GetNoaverageEmerdList", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Accept: "application/json, text/plain, */*"
+        },
+        body: JSON.stringify({
+          pageSize: 10,
+          pageNo: 1,
+          typeId: 1,
+          language: 0,
+          random: "ded40537a2ce416e96c00e5218f6859a",
+          signature: "69306982EEEB19FA940D72EC93C62552",
+          timestamp: Math.floor(Date.now() / 1000)
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        const list = data.data.list;
+        const numFreq = {};
+        const colorFreq = {};
+        let bigCount = 0;
+        let smallCount = 0;
+
+        list.forEach(item => {
+          const size = (item.number >= 0 && item.number <= 4) ? "Small" : "Big";
+          size === "Big" ? bigCount++ : smallCount++;
+          numFreq[item.number] = (numFreq[item.number] || 0) + 1;
+          colorFreq[item.colour] = (colorFreq[item.colour] || 0) + 1;
+        });
+
+        const likelyNumber = Object.keys(numFreq).reduce((a, b) => numFreq[a] > numFreq[b] ? a : b);
+        const likelyColor = Object.keys(colorFreq).reduce((a, b) => colorFreq[a] > colorFreq[b] ? a : b);
+        const likelySize = bigCount > smallCount ? "Big" : "Small";
+
+        const predictionText = 
+`*** AI Market Prediction ***
+Based on recent 10 rounds:
+
+Most frequent number: ${likelyNumber}
+Most frequent color: ${likelyColor}
+Most likely next size: ${likelySize}
+
+Advice: Expect ${likelySize} numbers and color ${likelyColor} in the next round.`;
+
+        typeText(gameDataContainer, predictionText, 35);
+      })
+      .catch(err => {
+        gameDataContainer.innerHTML = "Prediction failed. Try again later.";
+        console.error(err);
+      });
+    }
+  </script>
+</body>
 </html>
