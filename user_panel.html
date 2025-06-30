@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Hack - User Panel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0d1117;
+            color: #fff;
+            background-image: radial-gradient(circle at 75% 25%, rgba(33, 150, 243, 0.1) 0%, transparent 50%);
+        }
+        
+        /* Dark Hack Styles */
+        .dark-hack-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header-section {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .header-section h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(90deg, #4CAF50, #2196F3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+        }
+        
+        .header-section::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #4CAF50, #2196F3);
+            margin: 10px auto;
+            border-radius: 3px;
+        }
+        
+        .telegram-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #0088cc, #2aabee);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 15px 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .telegram-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #0077b5, #2298db);
+        }
+        
+        .telegram-btn i {
+            margin-right: 8px;
+        }
+        
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: #1a1f27;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        th, td {
+            border: 1px solid #444;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+        }
+        
+        th {
+            background-color: #2d3748;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #212835;
+        }
+        
+        .number-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .number-btn {
+            padding: 12px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .number-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .prediction-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #2d3748, #1a1f27);
+            border-radius: 12px;
+            display: none;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+            border: 1px solid #444;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .prediction-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .prediction-big {
+            color: #4CAF50;
+            text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+        }
+        
+        .prediction-small {
+            color: #f44336;
+            text-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+        }
+        
+        .confidence {
+            font-size: 16px;
+            color: #aaa;
+            margin: 5px 0;
+        }
+        
+        .wait-message {
+            font-size: 18px;
+            color: #2196F3;
+            margin: 10px 0;
+            font-style: italic;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        /* User Panel Styles */
+        .user-panel-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #1a1f27;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card {
+            background: #212835;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+        
+        .key-display {
+            font-family: monospace;
+            background: #2d3748;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            color: #fff;
+            border: 1px solid #444;
+        }
+        
+        .timer {
+            font-size: 24px;
+            text-align: center;
+            margin: 20px 0;
+            color: #fff;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            background: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: #166fe5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <!-- Dark Hack Section -->
+    <div class="dark-hack-container">
+        <div class="header-section">
+            <h1>𝐁𝐃 𝐅𝐀𝐇𝐈𝐌 𝟳𝟭𝘅™ 𝗩𝗜𝗣 𝗛𝗔𝗖𝗞</h1>
+            <a href="https://t.me/fahim_014" class="telegram-btn" target="_blank">
+                <i class="fab fa-telegram"></i> Join Telegram
+            </a>
+        </div>
+        
+        <div class="container">
+            <div class="input-section">
+                <div class="number-buttons">
+                    <button class="number-btn" onclick="addNumber(0)">0</button>
+                    <button class="number-btn" onclick="addNumber(1)">1</button>
+                    <button class="number-btn" onclick="addNumber(2)">2</button>
+                    <button class="number-btn" onclick="addNumber(3)">3</button>
+                    <button class="number-btn" onclick="addNumber(4)">4</button>
+                    <button class="number-btn" onclick="addNumber(5)">5</button>
+                    <button class="number-btn" onclick="addNumber(6)">6</button>
+                    <button class="number-btn" onclick="addNumber(7)">7</button>
+                    <button class="number-btn" onclick="addNumber(8)">8</button>
+                    <button class="number-btn" onclick="addNumber(9)">9</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="waitMessage" class="wait-message" style="display: none;">Please wait while analyzing...</div>
+        
+        <div id="predictionContainer" class="prediction-container">
+            <h3>Next Prediction</h3>
+            <div id="predictionValue" class="prediction-value"></div>
+            <div id="predictionConfidence" class="confidence"></div>
+        </div>
+        
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Issue</th>
+                    <th>Number</th>
+                    <th>B/S</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Results will be added here -->
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- User Panel Section -->
+    <div class="user-panel-container">
+        <div class="card">
+            <h2>Your Access</h2>
+            <div class="key-display">
+                <strong>Key:</strong> <span id="displayKey"></span><br>
+                <strong>Expires:</strong> <span id="displayExpiry"></span>
+            </div>
+            
+            <div class="timer">
+                <p>Time Remaining:</p>
+                <div id="countdown"></div>
+            </div>
+            
+            <button class="btn btn-danger" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // Dark Hack Scripts
+        let currentIssue = 1;
+        const maxRows = 10;
+        let gameHistory = [];
+        
+        function analyzePatterns(numbers) {
+            const strategies = [];
+            
+            // Strategy 1: Check for repeating numbers or small range
+            const lastNumber = numbers[0];
+            const isRepeating = numbers.slice(0, 3).every(n => n === lastNumber);
+            if (isRepeating) {
+                strategies.push({
+                    prediction: lastNumber <= 4 ? 'B' : 'S',
+                    confidence: 70 + Math.floor(Math.random() * 10),
+                    strategy: "Repeating number pattern detected"
+                });
+            }
+            
+            // Strategy 2: Opposite after multiple repeats
+            const recentNumbers = numbers.slice(0, 5);
+            const countRecent = recentNumbers.filter(n => n === lastNumber).length;
+            if (countRecent >= 3) {
+                strategies.push({
+                    prediction: lastNumber <= 4 ? 'B' : 'S',
+                    confidence: 75 + Math.floor(Math.random() * 10),
+                    strategy: "Opposite after multiple repeats"
+                });
+            }
+            
+            // Strategy 3: After 5 small numbers, expect big
+            const lastFiveSmall = numbers.slice(0, 5).every(n => n <= 4);
+            if (lastFiveSmall) {
+                strategies.push({
+                    prediction: 'B',
+                    confidence: 80 + Math.floor(Math.random() * 10),
+                    strategy: "After 5 consecutive small numbers"
+                });
+            }
+            
+            // Strategy 4: Last digit 7 or 9 predicts small
+            const lastDigit = lastNumber % 10;
+            if (lastDigit === 7 || lastDigit === 9) {
+                strategies.push({
+                    prediction: 'S',
+                    confidence: 65 + Math.floor(Math.random() * 10),
+                    strategy: "Last digit 7 or 9 pattern"
+                });
+            }
+            
+            // Strategy 5: Double numbers predict small
+            if (numbers[0] === numbers[1]) {
+                strategies.push({
+                    prediction: 'S',
+                    confidence: 60 + Math.floor(Math.random() * 10),
+                    strategy: "Double numbers pattern"
+                });
+            }
+            
+            // Strategy 6: Extreme numbers (1 and 9) predict small
+            if (numbers.some(n => n === 1) && numbers.some(n => n === 9)) {
+                strategies.push({
+                    prediction: 'S',
+                    confidence: 55 + Math.floor(Math.random() * 10),
+                    strategy: "Extreme numbers present"
+                });
+            }
+            
+            // Strategy 7: After 3 even numbers, expect odd (small)
+            const lastThreeEven = numbers.slice(0, 3).every(n => n % 2 === 0);
+            if (lastThreeEven) {
+                strategies.push({
+                    prediction: 'S',
+                    confidence: 70 + Math.floor(Math.random() * 10),
+                    strategy: "After 3 even numbers"
+                });
+            }
+            
+            // Strategy 8: Sum of last two > 10 predicts big
+            if (numbers.length >= 2) {
+                const sumLastTwo = numbers[0] + numbers[1];
+                if (sumLastTwo > 10) {
+                    strategies.push({
+                        prediction: 'B',
+                        confidence: 65 + Math.floor(Math.random() * 10),
+                        strategy: "Sum of last two numbers > 10"
+                    });
+                }
+            }
+            
+            // Strategy 9: After 0 or 1, expect big jump
+            if (numbers[0] === 0 || numbers[0] === 1) {
+                strategies.push({
+                    prediction: 'B',
+                    confidence: 75 + Math.floor(Math.random() * 10),
+                    strategy: "After 0 or 1 pattern"
+                });
+            }
+            
+            // Strategy 10: After 5 same numbers, expect break
+            const allSame = numbers.slice(0, 5).every(n => n === numbers[0]);
+            if (allSame) {
+                strategies.push({
+                    prediction: numbers[0] <= 4 ? 'B' : 'S',
+                    confidence: 85 + Math.floor(Math.random() * 10),
+                    strategy: "Break after 5 same numbers"
+                });
+            }
+            
+            // If no strategies matched, use basic probability
+            if (strategies.length === 0) {
+                const smallCount = numbers.filter(n => n <= 4).length;
+                const bigCount = numbers.filter(n => n > 4).length;
+                
+                strategies.push({
+                    prediction: smallCount > bigCount ? 'B' : 'S',
+                    confidence: 50 + Math.floor(Math.random() * 10),
+                    strategy: "Basic probability analysis"
+                });
+            }
+            
+            // Find the strategy with highest confidence
+            let bestStrategy = strategies[0];
+            for (const strategy of strategies) {
+                if (strategy.confidence > bestStrategy.confidence) {
+                    bestStrategy = strategy;
+                }
+            }
+            
+            return bestStrategy;
+        }
+
+        function updatePrediction() {
+            if (gameHistory.length < 5) return;
+            
+            // Show wait message
+            const waitMessage = document.getElementById('waitMessage');
+            waitMessage.style.display = 'block';
+            
+            // Hide prediction container while analyzing
+            const predictionContainer = document.getElementById('predictionContainer');
+            predictionContainer.style.display = 'none';
+            
+            // Simulate analysis delay
+            setTimeout(() => {
+                const prediction = analyzePatterns(gameHistory);
+                const predictionValue = document.getElementById('predictionValue');
+                const predictionConfidence = document.getElementById('predictionConfidence');
+                
+                // Hide wait message
+                waitMessage.style.display = 'none';
+                
+                // Show prediction
+                predictionValue.textContent = prediction.prediction;
+                predictionValue.className = `prediction-value ${prediction.prediction === 'B' ? 'prediction-big' : 'prediction-small'}`;
+                predictionConfidence.textContent = `${prediction.confidence}% confidence`;
+                predictionContainer.style.display = 'block';
+                
+                // Add animation
+                predictionContainer.style.animation = 'none';
+                void predictionContainer.offsetWidth; // Trigger reflow
+                predictionContainer.style.animation = 'fadeIn 0.5s ease-out';
+                
+            }, 3000); // 3 second delay for analysis
+        }
+
+        function addNumber(number) {
+            // Determine B/S
+            const result = (number <= 4) ? 'S' : 'B';
+            
+            // Add to table
+            const tableBody = document.getElementById('tableBody');
+            const newRow = tableBody.insertRow(0);
+            
+            newRow.insertCell(0).textContent = currentIssue;
+            newRow.insertCell(1).textContent = number;
+            newRow.insertCell(2).textContent = result;
+            
+            // Add to game history for prediction
+            gameHistory.unshift(number);
+            if (gameHistory.length > 10) {
+                gameHistory.pop();
+            }
+            
+            // Update prediction
+            updatePrediction();
+            
+            // Remove oldest row if we exceed maxRows
+            if (tableBody.rows.length > maxRows) {
+                tableBody.deleteRow(maxRows);
+            }
+            
+            // Increment issue number
+            currentIssue++;
+        }
+        
+        // User Panel Scripts
+        // Check login
+        const accessKey = localStorage.getItem('accessKey');
+        const expiresAt = localStorage.getItem('expiresAt');
+        
+        if (!accessKey || !expiresAt) {
+            window.location.href = "index.html";
+        }
+        
+        // Display key info
+        document.getElementById('displayKey').textContent = accessKey;
+        document.getElementById('displayExpiry').textContent = new Date(parseInt(expiresAt)).toLocaleString();
+        
+        // Countdown timer
+        function updateCountdown() {
+            const now = Date.now();
+            const remaining = parseInt(expiresAt) - now;
+            
+            if (remaining <= 0) {
+                document.getElementById('countdown').textContent = "EXPIRED";
+                logout();
+                return;
+            }
+            
+            const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((remaining % (1000 * 60)) / 1000);
+            
+            document.getElementById('countdown').textContent = 
+                `${days}d ${hours}h ${mins}m ${secs}s`;
+        }
+        
+        // Update every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        
+        // Logout
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('accessKey');
+            localStorage.removeItem('expiresAt');
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
